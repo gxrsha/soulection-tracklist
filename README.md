@@ -11,6 +11,7 @@ Creates a Spotify Playlists of tracks from Soulection Radio based on the track l
 
 ```bash
 pip install -r requirements
+python3 soulection_spotify.py
 ```
 
 `.env` file is required containing two env variables
