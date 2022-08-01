@@ -1,8 +1,5 @@
-requests
-spotipy
-PIL
-dotenv
-os
-io
-base64
-bs4
+beautifulsoup4==4.11.1
+Pillow==9.2.0
+python-dotenv==0.20.0
+requests==2.27.1
+spotipy==2.20.0
