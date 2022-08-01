@@ -1,0 +1,8 @@
+requests
+spotipy
+PIL
+dotenv
+os
+io
+base64
+bs4
