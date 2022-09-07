@@ -8,7 +8,7 @@ import base64
 from bs4 import BeautifulSoup
 
 
-url = 'https://soulection.com/tracklists/557'
+# url = 'https://soulection.com/tracklists/559'
 # Returns tracklist songs
 def get_soulection_tracklist(url):
     
@@ -20,7 +20,7 @@ def get_soulection_tracklist(url):
         soup = BeautifulSoup(html, 'html.parser')
         master_track_list = []
 
-        tracks = soup.find_all('a', {'class': 'track__list-item flex flex-row items-center justify-center p-4 text-lg transition-colors duration-1000 transition dark:hover:bg-gray-800 rounded'})
+        tracks = soup.find_all('a', {'class': 'track__list-item'})
 
         for track in tracks:
             track_dictionary = {}

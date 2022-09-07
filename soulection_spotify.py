@@ -20,10 +20,11 @@ def main(client, url):
 
     # Update image of our newly created playlist
     upload_spotify_playlist_image(client, playlist_id)
+    print(f'Successfully created playlist for Episode {soul.get_tracklist_number(url)} - https://open.spotify.com/playlist/{playlist_id}')
 
 
 def create_spotify_playlist(client, url):
-    print("Creating Spotify playlst...")
+    print("Creating Spotify playlist...")
     playlist_name = f"Soulection Radio Episode #{soul.get_tracklist_number(url)}"
     playlist_description = f"Tracks found in Soulection Radio Episode #{soul.get_tracklist_number(url)} - Listen to the full episode at soundcloud.com/soulection/soulection-radio-show-{soul.get_tracklist_number(url)}"
     playlist = client.user_playlist_create(os.getenv('SPOTIFY_USER_ID'), playlist_name, public=True, collaborative=False, description=playlist_description)
@@ -48,9 +49,9 @@ def get_track_uri(client, url, playlist_id):
                 uri_list.append(spotify_uri)
 
     unique_uri_list = list(set(uri_list))
+
     print(f"Number of tracks found on Spotify: {len(unique_uri_list)}")
     client.user_playlist_add_tracks(os.getenv('SPOTIFY_USER_ID'), playlist_id, unique_uri_list, position=None)
-    # print(f'uri_list: {len(uri_list)}')
 
 
 
@@ -68,7 +69,7 @@ def upload_spotify_playlist_image(client, playlist_id):
 
 
 if __name__ == '__main__':
-    tracklist_url = 'https://soulection.com/tracklists/558'
+    tracklist_url = 'https://soulection.com/tracklists/561'
     client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET')))
     print(client)
     main(client, tracklist_url)
