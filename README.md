@@ -23,5 +23,5 @@ The script ran in the repo will scrape songs off Soulection Tracklist and finds 
 Example: https://open.spotify.com/playlist/4OoqtelbOxjhNJ2dvBS0DE?si=d1eabf0dbfa542ad
 
 ### Future Work
-- [ ] Add more songs to playlist using Spotify's recommendations endpoint
+- [x] Add more songs to playlist using Spotify's recommendations endpoint
 - [ ] Create twitter bot to tweet playlist after its created
