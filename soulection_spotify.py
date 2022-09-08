@@ -4,11 +4,12 @@ from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 import soulection_tracklist as soul
 from PIL import Image
+from pprint import pprint
+import json
 
 load_dotenv()
 scope = 'playlist-modify-public, ugc-image-upload'
 REDIRECT_URI = 'http://localhost:8080'
-uri_list = ['spotify:track:4rdQivUpY3faWSm98gMplo', 'spotify:track:6aQWAtgTQsnNKRTVyG54ST', 'spotify:track:4Y8v3SauBTDS1qbWIKVxcZ', 'spotify:track:0mgFgqJJVNGiaG2oUuSj41', 'spotify:track:6WVVh2gJXQv8tW1Fb5fOa5', 'spotify:track:02mYw61RoS1vXvkD9Q5dpN', 'spotify:track:3U6UHyDRSgWCyvWiBfNFHb', 'spotify:track:6xooozu9X43pLiWwIxphTV', 'spotify:track:2yA2TMbRuV3BpdCqzv4uuX', 'spotify:track:5NaM1Pvh51i5Ja5EMb7D31', 'spotify:track:7BGgytgNrpGXHh00yzOHGx', 'spotify:track:2lv2Asn3LQY1jCQKE6VlNY', 'spotify:track:7E3D5EA6Sv89GNXABU7Xex', 'spotify:track:54huym3Clwn8vsqDeTVETg', 'spotify:track:1c2wTe7doRRk2n1XZe0KAM', 'spotify:track:0J119Oas2ox6JTTHUGZxHN', 'spotify:track:3IT44O4KU7gFFrnLYbLsUG']
 
 def main(client, url):
 
@@ -51,8 +52,49 @@ def get_track_uri(client, url, playlist_id):
     unique_uri_list = list(set(uri_list))
 
     print(f"Number of tracks found on Spotify: {len(unique_uri_list)}")
+    print('Adding songs to playlist..')
     client.user_playlist_add_tracks(os.getenv('SPOTIFY_USER_ID'), playlist_id, unique_uri_list, position=None)
 
+    if len(unique_uri_list) < 40:
+        add_recommended_songs_to_playlist(client, playlist_id, unique_uri_list)
+
+
+
+def add_recommended_songs_to_playlist(client, playlist_id, uri_of_songs):
+    print(f'Adding extra songs..')
+    items = client.playlist_items(playlist_id)
+    first_five_tracks = items['items'][0:5]
+
+    song_limit = 40 - len(uri_of_songs)
+    artist_uri_list = []
+    genre_list = []
+    recommended_song_uris = []
+    
+    for track in first_five_tracks:
+        artist_uri_list.append(track['track']['artists'][0]['uri'])
+
+    for artist in artist_uri_list:
+        artist_info = client.artist(artist)
+        if artist_info['genres']:
+            genre_list.append(artist_info['genres'][0])
+        else:
+            continue
+
+   
+    # print(f'Our artists: {artist_uri_list}')
+    # print(f'Seed genres: {genre_list}')
+    # print(f'seed_tracks: {uri_of_songs[0:5]}')
+    # print(f'Song limit: {song_limit}')
+
+    songs = client.recommendations(seed_artists=artist_uri_list[0:3], seed_genres=None, seed_tracks=uri_of_songs[0:2], limit=song_limit)
+
+    for song in songs['tracks']:
+        recommended_song_uris.append(song['uri'])
+    
+
+    client.user_playlist_add_tracks(os.getenv('SPOTIFY_USER_ID'), playlist_id, recommended_song_uris, position=None)
+    print('Finished adding additional songs...')
+        
 
 
 def upload_spotify_playlist_image(client, playlist_id):
@@ -69,7 +111,7 @@ def upload_spotify_playlist_image(client, playlist_id):
 
 
 if __name__ == '__main__':
-    tracklist_url = 'https://soulection.com/tracklists/561'
+    tracklist_url = 'https://soulection.com/tracklists/560'
     client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET')))
     print(client)
     main(client, tracklist_url)
