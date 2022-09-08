@@ -20,7 +20,10 @@ python3 soulection_spotify.py
 
 ### Playlists in Spotify
 The script ran in the repo will scrape songs off Soulection Tracklist and finds matching songs in Spotify to create a playlist.
-Example: https://open.spotify.com/playlist/4OoqtelbOxjhNJ2dvBS0DE?si=d1eabf0dbfa542ad
+Example: https://open.spotify.com/playlist/0kg5HT9f6IodNiOfMTltex
+
+Due to alot of soundcloud artists/tracks not being on Spotify - a way to get around this was using the `add_recommended_songs_to_playlist` method.
+This method finds matching songs based on artists and tracks that are within the playlist and adds to the playlist until it hits 40 tracks in total.
 
 ### Future Work
 - [x] Add more songs to playlist using Spotify's recommendations endpoint
