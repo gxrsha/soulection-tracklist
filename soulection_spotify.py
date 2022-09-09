@@ -1,12 +1,11 @@
-import base64, os, io
+import base64, os, io, json
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 import soulection_tracklist as soul
 from PIL import Image
 from pprint import pprint
-import json
-
+import soulection_twitter as st
 load_dotenv()
 scope = 'playlist-modify-public, ugc-image-upload'
 REDIRECT_URI = 'http://localhost:8080'
@@ -111,7 +110,8 @@ def upload_spotify_playlist_image(client, playlist_id):
 
 
 if __name__ == '__main__':
-    tracklist_url = 'https://soulection.com/tracklists/560'
-    client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET')))
-    print(client)
-    main(client, tracklist_url)
+    # tracklist_url = 'https://soulection.com/tracklists/560'
+    # client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET')))
+    # print(client)
+    # main(client, tracklist_url)
+    st.create_tweet()
