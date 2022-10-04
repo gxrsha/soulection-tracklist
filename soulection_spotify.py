@@ -1,10 +1,9 @@
-import base64, os, io, json, time
+import base64, os, io
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
 import soulection_tracklist as soul
 from PIL import Image
-from pprint import pprint
 import soulection_twitter as st
 load_dotenv()
 scope = 'playlist-modify-public, ugc-image-upload'
