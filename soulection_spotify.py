@@ -110,6 +110,7 @@ def upload_spotify_playlist_image(client, playlist_id):
 
 
 if __name__ == '__main__':
+    # TODO: Make this run automatically on a loop and run it on a server (right now its manually ran)
     tracklist_url = 'https://soulection.com/tracklists/566'
     client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET')))
     print(client)
