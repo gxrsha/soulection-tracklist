@@ -7,8 +7,6 @@ import requests
 import base64
 from bs4 import BeautifulSoup
 
-
-# url = 'https://soulection.com/tracklists/559'
 # Returns tracklist songs
 def get_soulection_tracklist(url):
     
@@ -43,5 +41,14 @@ def get_tracklist_image(url):
 def get_tracklist_number(url):
     return url.rsplit('/')[-1]
 
+# Gets latest track number from site
+def get_current_tracklist():
+    url = 'https://soulection.com/tracklists/'
+    response = requests.get(url)
 
-# get_soulection_tracklist(url)
+    if response.ok:
+        html = response.text
+        soup = BeautifulSoup(html, 'html.parser')
+        first_track_href = soup.find('a', {'class': 'dark:hover:bg-gray-800 transition p-4 -mx-4 py-4 flex flex-row items-center'})['href']
+
+        return first_track_href.rsplit('/')[-2]
