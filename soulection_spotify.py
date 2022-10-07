@@ -108,7 +108,6 @@ def upload_spotify_playlist_image(client, playlist_id):
 
 
 if __name__ == '__main__':
-    # TODO: Make this run automatically on a loop and run it on a server (right now its manually ran)
 
     current_track = 567
 
@@ -123,4 +122,5 @@ if __name__ == '__main__':
             main(client, tracklist_url)
         else:
             print(f"Did not find a new track for Episode: {current_track + 1}")
-            time.sleep(10)
+            # Sleep for 6 hours
+            time.sleep(21600)
