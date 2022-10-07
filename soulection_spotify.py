@@ -123,4 +123,4 @@ if __name__ == '__main__':
         else:
             print(f"Did not find a new track for Episode: {current_track + 1}")
             # Sleep for 6 hours
-            time.sleep(21600)
+            time.sleep(10)
