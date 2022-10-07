@@ -1,4 +1,4 @@
-import base64, os, io
+import base64, os, io, time
 import spotipy
 from spotipy.oauth2 import SpotifyOAuth
 from dotenv import load_dotenv
@@ -109,7 +109,18 @@ def upload_spotify_playlist_image(client, playlist_id):
 
 if __name__ == '__main__':
     # TODO: Make this run automatically on a loop and run it on a server (right now its manually ran)
-    tracklist_url = 'https://soulection.com/tracklists/566'
-    client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET')))
-    print(client)
-    main(client, tracklist_url)
+
+    current_track = 567
+
+    while True:
+        latest_track = soul.get_current_tracklist()
+        if current_track + 1 == int(latest_track):
+            print(f"Found a new track! -- Episode {latest_track}")
+            current_track += 1
+            tracklist_url = f"https://soulection.com/tracklists/{latest_track}"
+            client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET')))
+            print(client)
+            main(client, tracklist_url)
+        else:
+            print(f"Did not find a new track for Episode: {current_track + 1}")
+            time.sleep(10)
