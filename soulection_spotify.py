@@ -121,6 +121,6 @@ if __name__ == '__main__':
             print(client)
             main(client, tracklist_url)
         else:
-            print(f"Did not find a new track for Episode: {current_track + 1}")
-            # Sleep for 6 hours
-            time.sleep(10)
+            print(f"Did not find a new track for Soulection Radio Episode: {current_track + 1} -- sleeping for 1 hr")
+            # Sleep for 1 hour
+            time.sleep(3600)
