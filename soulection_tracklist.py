@@ -43,12 +43,12 @@ def get_tracklist_number(url):
 
 # Gets latest track number from site
 def get_current_tracklist():
-    url = 'https://soulectiontracklists.com/'
+    url = 'https://soulection.com/tracklists'   
     response = requests.get(url)
 
     if response.ok:
         html = response.text
         soup = BeautifulSoup(html, 'html.parser')
-        first_track_href = soup.find('a', {'class': 'flex flex-col md:flex-row justify-between text-xl'})['href']
+        first_track_href = soup.find('a', {'class': 'dark:hover:bg-gray-800 transition p-4 -mx-4 py-4 flex flex-row items-center'})['href']
 
         return first_track_href.rsplit('/')[-2]
