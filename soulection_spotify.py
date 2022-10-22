@@ -18,6 +18,7 @@ def main(client, url):
 
     # Update image of our newly created playlist
     upload_spotify_playlist_image(client, playlist_id)
+
     print(f'Successfully created playlist for Episode {soul.get_tracklist_number(url)} - https://open.spotify.com/playlist/{playlist_id}')
 
 
@@ -109,7 +110,7 @@ def upload_spotify_playlist_image(client, playlist_id):
 
 if __name__ == '__main__':
 
-    current_track = 567
+    current_track = 568
 
     while True:
         latest_track = soul.get_current_tracklist()
