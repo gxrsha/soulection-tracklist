@@ -6,7 +6,8 @@ import soulection_tracklist as soul
 from PIL import Image
 load_dotenv()
 scope = 'playlist-modify-public, ugc-image-upload'
-REDIRECT_URI = 'http://localhost:8080'
+# REDIRECT_URI = 'http://localhost:8080'
+REDIRECT_URI = 'https://soulection-tracklist.herokuapp.com/'
 
 def main(client, url):
 
