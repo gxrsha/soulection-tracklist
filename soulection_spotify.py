@@ -124,7 +124,7 @@ if __name__ == '__main__':
             print(f"Found a new track! -- Episode {latest_track}")
             current_track += 1
             tracklist_url = f"https://soulection.com/tracklists/{latest_track}"
-            client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET')))
+            client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET'), open_browser=False))
             print(client)
             print(client.current_user())
             main(client, tracklist_url)
