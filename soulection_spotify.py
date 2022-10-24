@@ -24,6 +24,7 @@ def main(client, url):
 
 def create_spotify_playlist(client, url):
     print("Creating Spotify playlist...")
+    print(f"getting current user: {client.user(os.getenv('SPOTIFY_USER_ID'))}")
     playlist_name = f"Soulection Radio Episode #{soul.get_tracklist_number(url)}"
     playlist_description = f"Tracks found in Soulection Radio Episode #{soul.get_tracklist_number(url)} - Listen to the full episode at soundcloud.com/soulection/soulection-radio-show-{soul.get_tracklist_number(url)}"
     print(f"Playlist name: {playlist_name} || Playlist description: {playlist_description}")
