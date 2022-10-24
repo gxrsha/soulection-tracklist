@@ -126,6 +126,7 @@ if __name__ == '__main__':
             tracklist_url = f"https://soulection.com/tracklists/{latest_track}"
             client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET')))
             print(client)
+            print(client.current_user())
             main(client, tracklist_url)
         else:
             print(f"Did not find a new track for Soulection Radio Episode: {current_track + 1} -- sleeping for 1 hr")
