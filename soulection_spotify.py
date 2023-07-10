@@ -1,12 +1,43 @@
 import base64, os, io, time
 import spotipy
-from spotipy.oauth2 import SpotifyOAuth
+from spotipy.oauth2 import SpotifyOAuth, SpotifyOauthError
 from dotenv import load_dotenv
 import soulection_tracklist as soul
 from PIL import Image
 load_dotenv()
 scope = 'playlist-modify-public, ugc-image-upload'
-REDIRECT_URI = 'https://www.google.com'
+# REDIRECT_URI = 'https://www.google.com'
+REDIRECT_URI = 'https://soulection-tracklist.herokuapp.com/oauth'
+
+import json
+import os
+
+from spotipy.oauth2 import SpotifyOAuth, SpotifyOauthError
+
+class HerokuCacheHandler(SpotifyOAuth):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+    def get_cached_token(self):
+        token_info = None
+
+        token_info_str = os.getenv('SPOTIFY_TOKEN_INFO')
+        if token_info_str:
+            token_info = json.loads(token_info_str)
+
+        if token_info:
+            # if scopes don't match, then bail
+            if 'scope' not in token_info or not self._is_scope_subset(self.scope, token_info['scope']):
+                return None
+
+            if self.is_token_expired(token_info):
+                token_info = self.refresh_access_token(token_info['refresh_token'])
+
+        return token_info
+
+    def save_token_info(self, token_info):
+        os.environ['SPOTIFY_TOKEN_INFO'] = json.dumps(token_info)
+
 
 def main(client, url):
 
@@ -20,18 +51,36 @@ def main(client, url):
     upload_spotify_playlist_image(client, playlist_id)
 
     print(f'Successfully created playlist for Episode {soul.get_tracklist_number(url)} - https://open.spotify.com/playlist/{playlist_id}')
+    print_results(url)
+
+
+def print_results(url):
+    print(f"""
+         ,_______________________________________,
+        /   HHH*                          *HHH   /.
+        `---------------------------------------" :
+        | +            Playlist {soul.get_tracklist_number(url)}           + | :
+        |             .____________.            | :
+        |       .++.  |######\  /##|  .++.      | :
+        |       +  +  |######/  \##|  +  +      | :
+        |       '++'  '------------'  '++'      | :
+        |            Spotify Playlist           | :
+        |                 gxrsha                | :
+        |                                       | :
+        |      /'''''''''''''''''''''''''\      I :
+        |     /     o       0         o   \     I :
+        |+   / O                         O \   +|,'
+        `---------------------------------------`
+
+
+    """)
 
 
 def create_spotify_playlist(client, url):
     print("Creating Spotify playlist...")
-    print(f"getting current user: {client.user(os.getenv('SPOTIFY_USER_ID'))}")
     playlist_name = f"Soulection Radio Episode #{soul.get_tracklist_number(url)}"
     playlist_description = f"Tracks found in Soulection Radio Episode #{soul.get_tracklist_number(url)} - Listen to the full episode at soundcloud.com/soulection/soulection-radio-show-{soul.get_tracklist_number(url)}"
-    print(f"Playlist name: {playlist_name} || Playlist description: {playlist_description}")
-    print(f"Our userID: {os.getenv('SPOTIFY_USER_ID')}")
-    print(f"Our client: {client}")
     playlist = client.user_playlist_create(os.getenv('SPOTIFY_USER_ID'), playlist_name, public=True, collaborative=False, description=playlist_description)
-    print(f"Our Playlist: {playlist}")
     playlist_id = playlist['id']
     print(f"New playlist id: {playlist_id}")
 
@@ -116,7 +165,7 @@ def upload_spotify_playlist_image(client, playlist_id):
 
 if __name__ == '__main__':
 
-    current_track = 568
+    current_track = 599
 
     while True:
         latest_track = soul.get_current_tracklist()
@@ -124,11 +173,12 @@ if __name__ == '__main__':
             print(f"Found a new track! -- Episode {latest_track}")
             current_track += 1
             tracklist_url = f"https://soulection.com/tracklists/{latest_track}"
-            client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET'), open_browser=False))
-            print(client)
-            print(client.current_user())
+            # tracklist_url = f"https://soulection.com/tracklists/600"
+            # client = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET')))
+            client = spotipy.Spotify(auth_manager=HerokuCacheHandler(scope=scope, redirect_uri=REDIRECT_URI, client_id=os.getenv('CLIENT_ID'), client_secret=os.getenv('CLIENT_SECRET')))
+
             main(client, tracklist_url)
         else:
-            print(f"Did not find a new track for Soulection Radio Episode: {current_track + 1} -- sleeping for 1 hr")
+            print(f"Did not find a new track for Soulection Radio Episode: {current_track + 1}, current track is: {current_track} -- sleeping for 1 hr")
             # Sleep for 1 hour
-            time.sleep(3600)
+            time.sleep(5)
